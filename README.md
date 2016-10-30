@@ -1,6 +1,6 @@
 # wav2mp3
 
-A command line tool that converters files from wav to mp3
+A command line tool that converts files from wav to mp3
 
 # To install
 1. Install lame library
@@ -24,7 +24,7 @@ Tested for wav files with 1-2 channels, 8-16 bits per sample.
 
 # Using
 
-1. POSIX thread pool library https://github.com/Pithikos/C-Thread-Pool
+1. POSIX thread pool library (https://github.com/Pithikos/C-Thread-Pool)
 2. Lame project (http://lame.sourceforge.net/)
 
 
