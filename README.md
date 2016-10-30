@@ -2,11 +2,13 @@
 
 A converter from  wav to mp3
 
-# To compile
+# To install
+1. Install lame library
+2. Setup LAME_DIR variable in Makefile pointing to the lame install directory
 
-make
+run make
 
-Compiles on linux and windows (Cygwin)
+*Compiles on linux and windows (Cygwin)
 
 # Manual
 
@@ -16,7 +18,7 @@ Using Unix path separators.
 
 Result files will be placed in the same directory.
 
-Tested for wav files with 1-2 channeles, 8-16 bits per sample.
+Tested for wav files with 1-2 channels, 8-16 bits per sample.
 
 
 
