@@ -8,9 +8,9 @@
 #include "lame_wrapper.h"
 
 
-void converter(const char* fileBase) {
+void converter(const char* waveFile) {
   
-  std::string fileIn(fileBase);
+  std::string fileIn(waveFile);
   std::string fileOut = fileIn;
   fileOut.replace(fileIn.size() - 3,  3, "mp3");
   
@@ -50,10 +50,11 @@ int main(int argc, char* argv[]) {
   unsigned poolSize = std::min(coresNumber, fileNames.size());
   threadpool thpool = thpool_init(poolSize);
 
-  for (size_t i = 0; i < fileNames.size(); i++)
-    {
-      thpool_add_work(thpool, (void (*)(void*))converter, (void*)fileNames[i].c_str());
-    }
+  for (size_t i = 0; i < fileNames.size(); i++) {
+    
+    //add jobs
+    thpool_add_work(thpool, (void (*)(void*))converter, (void*)fileNames[i].c_str());
+  }
   
   //wait for jobs to finish
   thpool_wait(thpool);

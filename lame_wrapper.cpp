@@ -78,6 +78,8 @@ int wavToMp3(const char* in, const char* out) {
   lame_set_quality(lame, 2);
   
   int bitsPerSample;
+
+  //parse wav header
   if (parse_wave_header(lame, pcm, bitsPerSample) < 0) {
     std::cerr << "Cannot parse header " << fileOut << std::endl;
     fclose(pcm); 
@@ -88,6 +90,9 @@ int wavToMp3(const char* in, const char* out) {
 
   do {
     
+    /**
+     * using a function from lame frontend, swap order sets up for 8 bits per sample.
+     */
     read = unpack_read_samples(PCM_SIZE, bitsPerSample/8, 
 			       bitsPerSample == 8 ? 1 : 0, 
 			       pcm_buffer, pcm);

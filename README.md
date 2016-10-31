@@ -6,18 +6,15 @@ A command line tool that converts files from wav to mp3
 1. Install lame library, Makefile is pointing to the standard lame install directory. 
 2. run make
 
-*Compiles on linux and windows (Cygwin)
+*Tested on linux and windows (Cygwin)
 
 # Usage
 
 wav2mp3 "wav-files-directory"
 
-Using Unix path separators.
-
 Result files will be placed in the same directory.
 
-Tested for wav files with 1,2 channels, 8,16,24,32 bits per sample.
-
+*Tested for wav files with 1,2 channels, 8,16,24,32 bits per sample.
 
 
 # Using

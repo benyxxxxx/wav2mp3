@@ -46,20 +46,19 @@ void getFiles(std::vector<std::string>& names, std::string& directory,
   finalPattern += pattern;;
   
   HANDLE hFind = ::FindFirstFile(finalPattern.c_str(), &fd); 
-  if(hFind != INVALID_HANDLE_VALUE) 
-    { 
-      do 
-	{ 
-	  if (! (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)  ) {	
-
-	    std::string name(directory);
-	    name += "\\";
-	    name += fd.cFileName;
-	    names.push_back(name);
-	  } 
+  if (hFind != INVALID_HANDLE_VALUE) { 
+    do 
+      { 
+	if (! (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)  ) {	
 	  
-	}while(::FindNextFile(hFind, &fd)); 
-      ::FindClose(hFind); 
-    } 
+	  std::string name(directory);
+	  name += "\\";
+	  name += fd.cFileName;
+	  names.push_back(name);
+	} 
+	
+      } while(::FindNextFile(hFind, &fd)); 
+    ::FindClose(hFind); 
+  } 
 }
 #endif
