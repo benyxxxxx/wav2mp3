@@ -33,15 +33,9 @@
 #include <iostream>
 
 
-/* global data for get_audio.c. */
-typedef struct get_audio_data_struct {
-  int     pcmbitwidth;
-} get_audio_data;
-
-
-static int parse_wave_header(lame_global_flags * gfp, FILE * sf, get_audio_data& global);
+static int parse_wave_header(lame_global_flags * gfp, FILE * sf, int& bitsPerSample);
 static int unpack_read_samples(const int samples_to_read, const int bytes_per_sample,
-                    const int swap_order, int *sample_buffer, FILE * pcm_in);
+			       const int swap_order, int *sample_buffer, FILE * pcm_in);
 
 static void splitChannels(int* all, int* left, int* right, int samples);
 
@@ -52,6 +46,7 @@ int wavToMp3(const char* in, const char* out) {
   std::string fileOut(out);
   
   int read, write;
+
 
   FILE *pcm = fopen(fileIn.c_str(), "rb");  //source    
   if (pcm <= 0) {
@@ -67,8 +62,8 @@ int wavToMp3(const char* in, const char* out) {
   } 
 
   
-  const int PCM_SIZE = 1152;
-  const int MP3_SIZE = PCM_SIZE * 2;
+  const int PCM_SIZE = 8192;
+  const int MP3_SIZE = PCM_SIZE;
   
   int pcm_buffer_l[PCM_SIZE>>1];
   int pcm_buffer_r[PCM_SIZE>>1];
@@ -82,8 +77,8 @@ int wavToMp3(const char* in, const char* out) {
   lame_set_VBR(lame, vbr_default);
   lame_set_quality(lame, 2);
   
-  get_audio_data global;
-  if (parse_wave_header(lame, pcm, global) < 0) {
+  int bitsPerSample;
+  if (parse_wave_header(lame, pcm, bitsPerSample) < 0) {
     std::cerr << "Cannot parse header " << fileOut << std::endl;
     fclose(pcm); 
     fclose(mp3); 
@@ -93,8 +88,8 @@ int wavToMp3(const char* in, const char* out) {
 
   do {
     
-    read = unpack_read_samples(PCM_SIZE, global.pcmbitwidth/8, 
-			       global.pcmbitwidth == 8 ? 1 : 0, 
+    read = unpack_read_samples(PCM_SIZE, bitsPerSample/8, 
+			       bitsPerSample == 8 ? 1 : 0, 
 			       pcm_buffer, pcm);
     
     if (read == 0) {
@@ -192,7 +187,7 @@ static int read_32_bits_high_low(FILE * fp)
 }
 
 
-static int parse_wave_header(lame_global_flags * gfp, FILE * sf, get_audio_data& global)
+static int parse_wave_header(lame_global_flags * gfp, FILE * sf, int& bitsPerSample)
 {
   int     format_tag = 0;
   int     channels = 0;
@@ -200,7 +195,6 @@ static int parse_wave_header(lame_global_flags * gfp, FILE * sf, get_audio_data&
   int     bits_per_sample = 0;
   int     samples_per_sec = 0;
   int     avg_bytes_per_sec = 0;
-  
   
   int     is_wav = 0;
   long    data_length = 0, file_length, subSize = 0;
@@ -285,7 +279,7 @@ static int parse_wave_header(lame_global_flags * gfp, FILE * sf, get_audio_data&
     }
     lame_set_in_samplerate(gfp, samples_per_sec);
     
-    global. pcmbitwidth = bits_per_sample;
+    bitsPerSample = bits_per_sample;
     lame_set_num_samples(gfp, data_length / (channels * ((bits_per_sample + 7) / 8)));
     return 1;
   }
@@ -346,8 +340,6 @@ static void splitChannels(int* all, int* left, int* right, int samples) {
     right[j] = all[i+1];
   }
 }
-
-
 
 
 

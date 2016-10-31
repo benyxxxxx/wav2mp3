@@ -3,11 +3,12 @@ CC := gcc
 CXX := g++
 LINK.o = $(LINK.cc)
 
-LAME_DIR := /home/benyx/Downloads/lame-3.99.5
+LAME_LIB_DIR := /usr/local/lib
+LAME_INC_DIR := /usr/local/include/lame
 
-CPPFLAGS := -g -I$(LAME_DIR)/include -MMD -std=c++11
+CPPFLAGS := -g -I$(LAME_INC_DIR) -MMD -std=c++11
 CFLAGS   := -W -Wall -g  -MMD
-LAME_LIB := $(LAME_DIR)/libmp3lame/.libs/libmp3lame.a
+LAME_LIB := $(LAME_LIB_DIR)/libmp3lame.a
 LDLIBS   := $(LAME_LIB) -pthread -W -Wall 
 
 SRC_C       := thpool.c 
@@ -24,7 +25,7 @@ $(APP) : $(OBJ)
 -include $(DEP)
 
 clean :
-	$(RM)  $(OBJ) $(APP) $(DEP)
+	$(RM) $(OBJ) $(APP) $(DEP)
 
 
 

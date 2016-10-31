@@ -4,10 +4,10 @@
 #include <glob.h>
 #include "myglob.h"
 
-void getFiles(std::vector<std::string>& names, std::string& pattern) {
+void getFiles(std::vector<std::string>& names, std::string& pattern, bool onlyDirs) {
 
   glob_t globbuf;
-  int err = glob(pattern.c_str(), 0, NULL, &globbuf);
+  int err = glob(pattern.c_str(), onlyDirs ? GLOB_MARK|GLOB_ONLYDIR:0, NULL, &globbuf);
   if(err == 0)
     {
       
