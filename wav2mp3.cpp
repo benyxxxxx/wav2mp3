@@ -14,7 +14,7 @@ void converter(const char* waveFile) {
   std::string fileOut = fileIn;
   fileOut.replace(fileIn.size() - 3,  3, "mp3");
   
-  if (wavToMp3(fileIn.c_str(), fileOut.c_str()) < 0) {
+  if (wavToMp3(fileIn, fileOut) < 0) {
     std::cout << "----> Failed to process " << fileIn << std::endl;
   } else {
     std::cout << "----> Processed  " << fileIn << std::endl;

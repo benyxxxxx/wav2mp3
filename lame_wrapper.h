@@ -1,3 +1,4 @@
+#include <string>
 
 #ifndef _WAVE2MP3_
 #define _WAVE2MP3_
@@ -7,6 +8,6 @@
  * Returns 1 on success, -1 on failure
  */
 
-int wavToMp3(const char* in, const char* out);
+int wavToMp3(std::string& in, std::string& out);
 
 #endif

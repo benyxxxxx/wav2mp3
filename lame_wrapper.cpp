@@ -40,13 +40,9 @@ static int unpack_read_samples(const int samples_to_read, const int bytes_per_sa
 static void splitChannels(int* all, int* left, int* right, int samples);
 
 
-int wavToMp3(const char* in, const char* out) {
-
-  std::string fileIn(in);
-  std::string fileOut(out);
+int wavToMp3(std::string& fileIn, std::string& fileOut) {
   
   int read, write;
-
 
   FILE *pcm = fopen(fileIn.c_str(), "rb");  //source    
   if (pcm <= 0) {
