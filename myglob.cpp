@@ -1,13 +1,21 @@
 
-#if defined(__linux__) || defined(__CYGWIN__)
+#if defined(__linux__) 
 
 #include <glob.h>
 #include "myglob.h"
 
-void getFiles(std::vector<std::string>& names, std::string& pattern, bool onlyDirs) {
+void getFiles(std::vector<std::string>& names, std::string& directory, 
+	      std::string& pattern) {
 
   glob_t globbuf;
-  int err = glob(pattern.c_str(), onlyDirs ? GLOB_MARK|GLOB_ONLYDIR:0, NULL, &globbuf);
+  
+  std::string finalPattern = directory;
+  if (finalPattern[finalPattern.size() - 1] != '/') {
+    finalPattern += "/";
+  }
+  finalPattern += pattern;
+
+  int err = glob(finalPattern.c_str(), 0, NULL, &globbuf);
   if(err == 0)
     {
       
@@ -19,7 +27,7 @@ void getFiles(std::vector<std::string>& names, std::string& pattern, bool onlyDi
     }
 }
 
-#elif _WIN32
+#else
 
 #include <stdio.h>
 #include <string>
@@ -27,19 +35,29 @@ void getFiles(std::vector<std::string>& names, std::string& pattern, bool onlyDi
 #include <windows.h>
 #include <vector>
 
-void getFiles(std::vector<std::string>& names, std::string& pattern) {
+void getFiles(std::vector<std::string>& names, std::string& directory, 
+	      std::string& pattern) {
   
   WIN32_FIND_DATA fd; 
-  HANDLE hFind = ::FindFirstFile(pattern.c_str(), &fd); 
+  std::string finalPattern = directory;
+  if (finalPattern[finalPattern.size() - 1] != '\\') {
+    finalPattern += "\\";
+  }  
+  finalPattern += pattern;;
+  
+  HANDLE hFind = ::FindFirstFile(finalPattern.c_str(), &fd); 
   if(hFind != INVALID_HANDLE_VALUE) 
     { 
       do 
 	{ 
-	  if(! (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) 
-	    {
-	      
-	      names.push_back(fd.cFileName);
-	    } 
+	  if (! (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)  ) {	
+
+	    std::string name(directory);
+	    name += "\\";
+	    name += fd.cFileName;
+	    names.push_back(name);
+	  } 
+	  
 	}while(::FindNextFile(hFind, &fd)); 
       ::FindClose(hFind); 
     } 

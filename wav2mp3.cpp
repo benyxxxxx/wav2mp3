@@ -24,7 +24,7 @@ void converter(const char* fileBase) {
 
 int main(int argc, char* argv[]) {
   
-  if (argc < 2) {
+  if (argc != 2) {
     std::cout << "Please specify *wav files directory" << std::endl;
     return -1;
   }
@@ -32,17 +32,15 @@ int main(int argc, char* argv[]) {
   std::string dir(argv[1]);
   std::vector<std::string> fileNames;  
 
-  getFiles(fileNames, dir, true);
-  if (fileNames.size() < 1) {
-    std::cout << "\""<<dir << "\" is not a directory." << std::endl;
-    return -1;
-  }
-  
-  std::string pattern = fileNames[0] + "*.wav";
-  fileNames.resize(0);
+  std::string pattern("*.wav");
 
   //lookup file list
-  getFiles(fileNames, pattern, false);
+  getFiles(fileNames, dir, pattern);
+  
+  if (fileNames.size() == 0) {
+    std::cout << "No wav files found" << std::endl;
+    return -1;
+  }
   
   std::cout << "Found " << fileNames.size() 
 	    << " wav files, Processing..." << std::endl;
@@ -50,7 +48,7 @@ int main(int argc, char* argv[]) {
   //create thread pool
   unsigned coresNumber = std::thread::hardware_concurrency();
   unsigned poolSize = std::min(coresNumber, fileNames.size());
-  threadpool thpool = thpool_init(std::stoi(/*argv[2])*/poolSize);
+  threadpool thpool = thpool_init(poolSize);
 
   for (size_t i = 0; i < fileNames.size(); i++)
     {

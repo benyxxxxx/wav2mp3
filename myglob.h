@@ -5,6 +5,6 @@
 #include <vector>
 #include <string>
 
-void getFiles(std::vector<std::string>& names, std::string& pattern, bool onlyDirs);
+void getFiles(std::vector<std::string>& names, std::string& directory, std::string& pattern);
 
 #endif
