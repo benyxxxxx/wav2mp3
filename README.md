@@ -3,7 +3,7 @@
 A command line tool that converts files from wav to mp3
 
 # To install
-1. Install lame library, Makefile is pointing to the standard lame install directory. 
+1. Install lame library, Makefile is pointing to the standard lame install directory on linux, should be editted on windows.
 2. run make
 
 *Tested on linux and windows (Cygwin)
