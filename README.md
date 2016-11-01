@@ -15,6 +15,7 @@ wav2mp3 "wav-files-directory"
 Result files will be placed in the same directory.
 
 *Tested for wav files with 1,2 channels, 8,16,24,32 bits per sample.
+*Uses VBR Encoding with quality 2.
 
 
 # Using
